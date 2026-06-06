@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+glowbyte/__init__.py
+glowbyte.egg-info/PKG-INFO
+glowbyte.egg-info/SOURCES.txt
+glowbyte.egg-info/dependency_links.txt
+glowbyte.egg-info/requires.txt
+glowbyte.egg-info/top_level.txt
