@@ -1,2 +1,128 @@
-# glowbyte
-Layer-based photo editing in Python. Compositions, layers, filters, effects. 
+# GlowByte
+
+A Python image composition engine with layers, filters, and blend modes.
+
+#### Video Demo: https://andstudies.com/tools/glowbyte/glowbyte.mp4
+
+#### Description
+
+glowbyte is a Python package for programmatic photo editing. Instead of opening Photoshop or GIMP, you write code — stack layers, apply filters, set blend modes and opacity, and export the result.
+
+The idea is simple: a canvas holds layers, each layer holds an image, and each layer can have its own position, size, opacity, blend mode, and effects. When you export, glowbyte composites everything together from bottom to top and writes the final image.
+
+This makes glowbyte useful for automated image generation, social media templates, batch processing, data-driven graphics, and anyone who'd rather write Python than drag sliders. The inspiration came from my work on [PyFrame](https://github.com/sfyds/pyframe), a video composition engine — glowbyte is the image foundation that PyFrame will eventually build on.
+
+## Features
+
+- Layer-based composition system
+- Image layers with position, size, and opacity
+- Text layers with font, size, and color
+- Solid color and gradient layers
+- Blend modes (multiply, screen, overlay, soft light, etc.)
+- Non-destructive filters (blur, sharpen, brightness, contrast, saturation, hue shift)
+- Chroma key / green screen removal
+- Resize, crop, and transform operations
+- PNG and JPEG export
+
+## Installation
+
+```
+pip install glowbyte
+```
+
+Or install from source:
+
+```
+git clone https://github.com/sfyds/glowbyte.git
+cd glowbyte
+pip install -e .
+```
+
+## Usage
+
+```python
+from glowbyte import Canvas, Layer
+
+# create a canvas
+canvas = Canvas(1920, 1080)
+
+# add a background
+bg = Layer.from_file("background.png")
+canvas.add_layer(bg)
+
+# add a photo with reduced opacity and a blend mode
+photo = Layer.from_file("portrait.png", opacity=0.8, blend_mode="multiply")
+photo.move(100, 50)
+canvas.add_layer(photo)
+
+# apply filters
+photo.filter.brightness(1.2)
+photo.filter.contrast(1.1)
+photo.filter.blur(radius=2)
+
+# add text
+title = Layer.text("hello world", font_size=72, color="#ffffff")
+title.move(200, 400)
+canvas.add_layer(title)
+
+# export
+canvas.export("result.png")
+```
+
+## Project Structure
+
+```
+glowbyte/
+    glowbyte/
+        __init__.py
+        canvas.py
+        layer.py
+        filters.py
+        blend.py
+        text.py
+        renderer.py
+        export.py
+    examples/
+        basic_composite.py
+        text_overlay.py
+        blend_modes.py
+        batch_edit.py
+    tests/
+        test_canvas.py
+        test_layer.py
+        test_filters.py
+        test_blend.py
+    assets/
+        example_background.png
+    pyproject.toml
+    README.md
+    LICENSE
+```
+
+## TODO
+
+### Core
+- [ ] Layer groups
+- [ ] Layer masks
+- [ ] Crop and trim
+- [ ] Rotation and scaling transforms
+- [ ] Undo/redo history
+
+### Effects
+- [ ] Drop shadow
+- [ ] Stroke/outline
+- [ ] Gradient maps
+- [ ] Color overlay
+- [ ] Noise generation
+
+### Usability
+- [ ] JSON scene format (load/save compositions)
+- [ ] Batch processing CLI
+- [ ] Better error messages
+- [ ] More example scripts
+
+### Long-Term
+- [ ] Integration with PyFrame for video composition
+- [ ] Plugin system for custom filters
+- [ ] WebP and TIFF export
+- [ ] Simple web preview interface
