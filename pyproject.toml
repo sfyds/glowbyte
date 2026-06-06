@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glowbyte"
+version = "0.1.0"
+description = "A Python image composition engine with layers, filters, and blend modes."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Elena Andrea Müller"}
+]
+dependencies = [
+    "Pillow>=10.0",
+    "numpy>=1.24",
+]
+
+[project.urls]
+Homepage = "https://github.com/sfyds/glowbyte"
+Repository = "https://github.com/sfyds/glowbyte"
+Website = "https://andstudies.com/tools/glowbyte/"
+
+[tool.setuptools.packages.find]
+include = ["glowbyte*"]
