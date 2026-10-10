@@ -60,7 +60,7 @@ def count_colors(pixels):
 # from there we tolerate a certain variance of sensitivity as distance 
 # those colors are summarised under the same centre 
 
-#--- merge similar colors depending on sensitivity --- 
+#--- merge similar colors depending on sensitivity, already weight it here--- 
 def merge_colors(counts, sens):
     newdict = {} 
     tolerance = MAX_RGB_DISTANCE * (1 - sens / 100)    
@@ -77,6 +77,7 @@ def merge_colors(counts, sens):
             if color not in used and distance(center, color) <= tolerance: 
                 used.add(color)
                 total += counts[color]
+                
         newdict[center] = total
     return newdict
 
@@ -153,7 +154,7 @@ def main():
     # print (newdict)
 
     percentages = to_percentages(newdict)
-    # print(percentages)
+    print(percentages)
 
     
 
