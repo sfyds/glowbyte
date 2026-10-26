@@ -1,128 +1,50 @@
 # GlowByte
 
-A Python image composition engine with layers, filters, and blend modes.
+A Python image composition engine with layers, filters and blend modes — **work in progress**.
 
-#### Video Demo: https://andstudies.com/tools/glowbyte/glowbyte.mp4
+The goal: edit images with code instead of Photoshop. A canvas holds layers, each layer has its own position, opacity, blend mode and filters, and GlowByte composites everything into one image. The layer engine isn't built yet. I'm starting with color analysis, which later features (palettes, color overlays, gradient maps) will build on.
 
-#### Description
+## What works now
 
-glowbyte is a Python package for programmatic photo editing. Instead of opening Photoshop or GIMP, you write code — stack layers, apply filters, set blend modes and opacity, and export the result.
+### Color palette detection — `prelim/colors.py`
 
-The idea is simple: a canvas holds layers, each layer holds an image, and each layer can have its own position, size, opacity, blend mode, and effects. When you export, glowbyte composites everything together from bottom to top and writes the final image.
+Finds the main colors of an image and plots how much of the image each one covers.
 
-This makes glowbyte useful for automated image generation, social media templates, batch processing, data-driven graphics, and anyone who'd rather write Python than drag sliders. The inspiration came from my work on [PyFrame](https://github.com/sfyds/pyframe), a video composition engine — glowbyte is the image foundation that PyFrame will eventually build on.
+- Measures color similarity as Euclidean distance in RGB space
+- Merges similar colors based on a sensitivity from 0–100 (higher = more distinct colors)
+- Outputs a histogram of the resulting palette with percentages
 
-## Features
-
-- Layer-based composition system
-- Image layers with position, size, and opacity
-- Text layers with font, size, and color
-- Solid color and gradient layers
-- Blend modes (multiply, screen, overlay, soft light, etc.)
-- Non-destructive filters (blur, sharpen, brightness, contrast, saturation, hue shift)
-- Chroma key / green screen removal
-- Resize, crop, and transform operations
-- PNG and JPEG export
-
-## Installation
+| Input | Output |
+|---|---|
+| ![input](prelim/input/rainbow_gradient.jpg) | ![palette](prelim/output/output_rainbow_gradient.jpg) |
 
 ```
-pip install glowbyte
+cd prelim
+python colors.py rainbow_gradient.jpg
 ```
 
-Or install from source:
+Images are read from `prelim/input/` and written to `prelim/output/`. You'll be asked for a sensitivity (press Enter for the default of 85).
+
+### Region growing — `prelim/region_grow.py` *(in progress)*
+
+Uses the detected palette to repaint the image: it places a seed pixel for each palette color and grows regions out to neighbouring pixels within a tolerance. Seed detection is done; region growing and gap filling are next.
+
+## Requirements
+
+Python 3, `numpy`, `Pillow`, `matplotlib`
 
 ```
-git clone https://github.com/sfyds/glowbyte.git
-cd glowbyte
-pip install -e .
+pip install numpy pillow matplotlib
 ```
 
-## Usage
+## Next steps
 
-```python
-from glowbyte import Canvas, Layer
+- [ ] Finish region growing and save the recolored image
+- [ ] Pixel art mode: turn an image (with optional text) into pixel art using the detected palette
+- [ ] Edge detection (e.g. Sobel filter)
+- [ ] Canvas and layer system
+- [ ] Blend modes and basic filters
 
-# create a canvas
-canvas = Canvas(1920, 1080)
+## License
 
-# add a background
-bg = Layer.from_file("background.png")
-canvas.add_layer(bg)
-
-# add a photo with reduced opacity and a blend mode
-photo = Layer.from_file("portrait.png", opacity=0.8, blend_mode="multiply")
-photo.move(100, 50)
-canvas.add_layer(photo)
-
-# apply filters
-photo.filter.brightness(1.2)
-photo.filter.contrast(1.1)
-photo.filter.blur(radius=2)
-
-# add text
-title = Layer.text("hello world", font_size=72, color="#ffffff")
-title.move(200, 400)
-canvas.add_layer(title)
-
-# export
-canvas.export("result.png")
-```
-
-## Project Structure
-
-```
-glowbyte/
-    glowbyte/
-        __init__.py
-        canvas.py
-        layer.py
-        filters.py
-        blend.py
-        text.py
-        renderer.py
-        export.py
-    examples/
-        basic_composite.py
-        text_overlay.py
-        blend_modes.py
-        batch_edit.py
-    tests/
-        test_canvas.py
-        test_layer.py
-        test_filters.py
-        test_blend.py
-    assets/
-        example_background.png
-    pyproject.toml
-    README.md
-    LICENSE
-```
-
-## TODO
-
-### Core
-- [ ] Layer groups
-- [ ] Layer masks
-- [ ] Crop and trim
-- [ ] Rotation and scaling transforms
-- [ ] Undo/redo history
-
-### Effects
-- [ ] Drop shadow
-- [ ] Stroke/outline
-- [ ] Gradient maps
-- [ ] Color overlay
-- [ ] Noise generation
-
-### Usability
-- [ ] JSON scene format (load/save compositions)
-- [ ] Batch processing CLI
-- [ ] Better error messages
-- [ ] More example scripts
-
-### Long-Term
-- [ ] Integration with PyFrame for video composition
-- [ ] Plugin system for custom filters
-- [ ] WebP and TIFF export
-- [ ] Simple web preview interface
+MIT

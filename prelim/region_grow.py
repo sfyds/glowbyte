@@ -58,7 +58,22 @@ def load_image_2d(path, max_size = 200): #loads pixels, shrink it down to 200px 
 # werden die schon einer farbe zugewiesen sind in z.B. palette[].
 # somit hat z.b. palette[0] automatisch Vorrang im Vergleich zu palette[1]. 
 # 
-# Also ersten. :  
+#   
+# find_seeds(img, labels, color, tolerance):
+#
+# seeds = []
+# h, w = Größe von labels
+#
+# für jedes y von 0 bis h:
+#     für jedes x von 0 bis w:
+#         wenn labels[y, x] != -1:            # schon vergeben
+#             überspringen
+#         d = colors.distance(img[y, x], color)
+#         wenn d <= tolerance:
+#             (d, y, x) in seeds speichern    # Position + Abstand merken
+#
+# seeds nach d sortieren (kleinster zuerst)  # beste Seeds zuerst
+# gib seeds zurück
 def find_seed(img, labels, color, tolerance):
     pass            # None, wenn nichts nah genug ist
 

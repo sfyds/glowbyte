@@ -29,3 +29,5 @@ Thumbs.db
 # Generated images from examples
 *_out.png
 result.*
+
+api_showcase.py
